@@ -1,3 +1,4 @@
+uvicorn[standard]
 google-genai
 python-dotenv
 fastapi
