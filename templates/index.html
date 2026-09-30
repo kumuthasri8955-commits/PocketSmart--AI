@@ -1,0 +1,555 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>PocketSmart AI</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fb;
+            color: #334155;
+        }
+
+        .container {
+            width: 90%;
+            max-width: 900px;
+            margin: 40px auto;
+            text-align: center;
+        }
+
+        h1 {
+            color: #4f46e5;
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+            color: #64748b;
+            margin-bottom: 30px;
+        }
+
+        h2 {
+            color: #334155;
+        }
+
+        .planner-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-bottom: 25px;
+        }
+
+        button {
+            border: none;
+            padding: 12px 20px;
+            border-radius: 10px;
+            color: white;
+            font-size: 15px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            opacity: 0.9;
+        }
+
+        .home-btn {
+            background: #16a34a !important;
+        }
+
+        .party-btn {
+            background: #f97316 !important;
+        }
+
+        .jewelry-btn {
+            background: #9333ea !important;
+        }
+
+        .planner-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .planner-card h2 {
+            text-align: center;
+            margin-top: 0;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            outline: none;
+            border-color: #4f46e5;
+        }
+
+        .generate-btn {
+            margin-top: 20px;
+            background: #4f46e5;
+        }
+
+        .result {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            text-align: left;
+            white-space: pre-line;
+            line-height: 1.7;
+        }
+           .logout-btn {
+        background: #64748b;
+        margin-bottom: 20px;
+}
+.logout-btn {
+        background: #64748b;
+        margin-bottom: 20px;
+}
+.history-btn {
+    background: #2563eb !important;
+    color: white !important;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding: 12px 20px;
+    border-radius: 10px;
+}
+.clear-btn {
+    background: #dc2626;
+    color: white;
+    font-weight: bold;
+    margin-bottom: 20px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+}
+    </style>
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🤖 PocketSmart AI</h1>
+
+    <p class="subtitle">
+        Your Smart Budget & Recommendation Assistant
+    </p>
+    <button onclick="logout()" class="logout-btn">
+    Logout
+</button>
+<button onclick="showHistory()" class="history-btn">
+    📋 History
+</button>
+
+
+<button onclick="clearHistory()" class="clear-btn">
+    🗑️ Clear History
+</button>
+
+    <!-- Planner Buttons -->
+    <div class="planner-buttons">
+
+        <button class="home-btn" onclick="showHomePlanner()">
+            🏠 Home Interior
+        </button>
+
+        <button class="party-btn" onclick="showPartyPlanner()">
+            🎉 Party Planning
+        </button>
+
+        <button class="jewelry-btn" onclick="showJewelryPlanner()">
+            💎 Jewelry
+        </button>
+
+    </div>
+
+
+    <!-- HOME PLANNER -->
+    <div id="homePlanner" class="planner-card">
+
+        <h2>🏠 Home Interior Planner</h2>
+
+        <label>Budget</label>
+        <input
+            type="number"
+            id="homeBudget"
+            placeholder="Enter your budget"
+        >
+
+        <label>Room Type</label>
+        <select id="roomType">
+            <option>Living Room</option>
+            <option>Bedroom</option>
+            <option>Kitchen</option>
+        </select>
+
+        <label>Style</label>
+        <select id="homeStyle">
+            <option>Modern</option>
+            <option>Minimal</option>
+            <option>Traditional</option>
+        </select>
+
+        <label>Requirements</label>
+        <textarea
+            id="homeRequirements"
+            placeholder="Example: Sofa, storage, study table..."
+        ></textarea>
+
+        <button class="generate-btn" onclick="generateHomeRecommendation()">
+            Get Home Recommendation
+        </button>
+
+    </div>
+
+
+    <!-- PARTY PLANNER -->
+    <div id="partyPlanner" class="planner-card" style="display:none;">
+
+        <h2>🎉 Party Planner</h2>
+
+        <label>Budget</label>
+        <input
+            type="number"
+            id="partyBudget"
+            placeholder="Enter your budget"
+        >
+
+        <label>Number of Guests</label>
+        <input
+            type="number"
+            id="partyGuests"
+            placeholder="Example: 50"
+        >
+
+        <label>Event Type</label>
+        <select id="partyEvent">
+            <option>Birthday</option>
+            <option>Wedding</option>
+            <option>Corporate</option>
+        </select>
+
+        <label>Venue</label>
+        <input
+            type="text"
+            id="partyVenue"
+            placeholder="Example: Home / Hall / Hotel"
+        >
+
+        <label>Requirements</label>
+        <textarea
+            id="partyRequirements"
+            placeholder="Example: Food, decoration, music..."
+        ></textarea>
+
+        <button class="generate-btn" onclick="generatePartyRecommendation()">
+            Get Party Recommendation
+        </button>
+
+    </div>
+
+
+    <!-- JEWELRY PLANNER -->
+    <div id="jewelryPlanner" class="planner-card" style="display:none;">
+
+        <h2>💎 Jewelry Planner</h2>
+
+        <label>Budget</label>
+        <input
+            type="number"
+            id="jewelryBudget"
+            placeholder="Enter your budget"
+        >
+
+        <label>Occasion</label>
+        <select id="jewelryOccasion">
+            <option>College / Casual</option>
+            <option>Wedding</option>
+            <option>Party</option>
+            <option>Traditional Event</option>
+        </select>
+
+        <label>Jewelry Style</label>
+        <select id="jewelryStyle">
+            <option>Simple</option>
+            <option>Elegant</option>
+            <option>Traditional</option>
+            <option>Trendy</option>
+        </select>
+
+        <label>Requirements</label>
+        <textarea
+            id="jewelryRequirements"
+            placeholder="Example: Necklace, earrings..."
+        ></textarea>
+
+        <button class="generate-btn" onclick="generateJewelryRecommendation()">
+            Get Jewelry Recommendation
+        </button>
+
+    </div>
+
+
+    <!-- RESULT -->
+    <div id="result" class="result">
+        Your recommendation will appear here.
+    </div>
+
+</div>
+
+
+<script>
+    let history = [];
+   function logout() {
+    window.location.href = "/login";
+}
+function showHistory() {
+    document.getElementById("result").innerText =
+        "📋 Recommendation History\n\n" + history.join("\n");
+}
+function clearHistory() {
+    history = [];
+    document.getElementById("result").innerText =
+        "📋 History cleared.";
+}
+
+    // HOME PLANNER
+    function showHomePlanner() {
+
+        document.getElementById("homePlanner").style.display = "block";
+        document.getElementById("partyPlanner").style.display = "none";
+        document.getElementById("jewelryPlanner").style.display = "none";
+
+        document.getElementById("result").innerText = "";
+    }
+
+
+    function generateHomeRecommendation() {
+
+        const budget =
+            document.getElementById("homeBudget").value;
+
+        const room =
+            document.getElementById("roomType").value;
+
+        const style =
+            document.getElementById("homeStyle").value;
+
+        const requirements =
+            document.getElementById("homeRequirements").value;
+
+        const budgetNumber = Number(budget);
+
+        if (!budget) {
+
+            document.getElementById("result").innerText =
+                "Please enter your budget.";
+
+            return;
+        }
+
+history.push("home Interior");
+document.getElementById("result").innerText =
+`🏠 Home Interior Recommendation
+
+Budget: ₹${budgetNumber.toLocaleString("en-IN")}
+Room: ${room}
+Style: ${style}
+
+💰 Budget Plan:
+* Furniture & Decor: ₹${Math.round(budgetNumber * 0.40).toLocaleString("en-IN")}
+* Lighting: ₹${Math.round(budgetNumber * 0.15).toLocaleString("en-IN")}
+* Curtains & Soft Furnishing: ₹${Math.round(budgetNumber * 0.15).toLocaleString("en-IN")}
+* Wall Decor: ₹${Math.round(budgetNumber * 0.10).toLocaleString("en-IN")}
+* Storage & Accessories: ₹${Math.round(budgetNumber * 0.14).toLocaleString("en-IN")}
+* Miscellaneous: ₹${Math.round(budgetNumber * 0.06).toLocaleString("en-IN")}
+
+🛋️ Recommendations:
+* Furniture suitable for your ${room}
+* ${style} style decor
+* Suitable lighting for the room
+* Curtains and soft furnishings
+* Wall decor and accessories
+* Storage solution based on your requirements
+
+📝 Requirements:
+${requirements || "Basic furniture and elegant decor"}
+
+✨ Plan:
+A ${style.toLowerCase()} ${room.toLowerCase()} design with practical furniture, good lighting and elegant decor while staying within the budget.`;
+
+    }
+
+
+    // PARTY PLANNER
+    function showPartyPlanner() {
+
+        document.getElementById("homePlanner").style.display = "none";
+        document.getElementById("partyPlanner").style.display = "block";
+        document.getElementById("jewelryPlanner").style.display = "none";
+
+        document.getElementById("result").innerText = "";
+    }
+
+
+    function generatePartyRecommendation() {
+
+        const budget =
+            document.getElementById("partyBudget").value;
+
+        const guests =
+            document.getElementById("partyGuests").value;
+
+        const event =
+            document.getElementById("partyEvent").value;
+
+        const venue =
+            document.getElementById("partyVenue").value;
+
+        const requirements =
+            document.getElementById("partyRequirements").value;
+
+        if (!budget || !guests) {
+
+            document.getElementById("result").innerText =
+                "Please enter your budget and number of guests.";
+
+            return;
+        }
+
+        const budgetNumber = Number(budget);
+        history.push("party planning");
+
+        document.getElementById("result").innerText =
+`🎉 Party Planning Recommendation
+
+Budget: ₹${budgetNumber.toLocaleString("en-IN")}
+Guests: ${guests}
+Event Type: ${event}
+Venue: ${venue || "Not specified"}
+
+📝 Requirements:
+${requirements || "Food, decoration and entertainment"}
+
+💰 Budget Breakdown:
+* Food & Catering: ₹${Math.round(budgetNumber * 0.40).toLocaleString("en-IN")}
+* Decoration: ₹${Math.round(budgetNumber * 0.17).toLocaleString("en-IN")}
+* Venue: ₹${Math.round(budgetNumber * 0.27).toLocaleString("en-IN")}
+* Entertainment: ₹${Math.round(budgetNumber * 0.10).toLocaleString("en-IN")}
+* Miscellaneous: ₹${Math.round(budgetNumber * 0.06).toLocaleString("en-IN")}
+
+🎯 Recommendations:
+* Suitable food and catering for ${guests} guests
+* ${event} themed decoration
+* Suitable venue arrangement
+* Music and entertainment
+* Guest-friendly seating arrangement
+
+✨ Plan:
+A well-organized ${event.toLowerCase()} party for ${guests} guests with suitable food, decoration, venue and entertainment while staying within the budget.`;
+
+    }
+
+
+    // JEWELRY PLANNER
+    function showJewelryPlanner() {
+
+        document.getElementById("homePlanner").style.display = "none";
+        document.getElementById("partyPlanner").style.display = "none";
+        document.getElementById("jewelryPlanner").style.display = "block";
+
+        document.getElementById("result").innerText = "";
+    }
+
+
+    function generateJewelryRecommendation() {
+
+        const budget =
+            document.getElementById("jewelryBudget").value;
+
+        const occasion =
+            document.getElementById("jewelryOccasion").value;
+
+        const style =
+            document.getElementById("jewelryStyle").value;
+
+        const requirements =
+            document.getElementById("jewelryRequirements").value;
+
+        if (!budget) {
+
+            document.getElementById("result").innerText =
+                "Please enter your budget.";
+
+            return;
+        }
+
+        const budgetNumber = Number(budget);
+        history.push("jewelry");
+        document.getElementById("result").innerText =
+`💎 Jewelry Recommendation
+
+Budget: ₹${budgetNumber.toLocaleString("en-IN")}
+Occasion: ${occasion}
+Style: ${style}
+
+📝 Requirements:
+${requirements || "Necklace, earrings and bracelet"}
+
+✨ Suggestions:
+* ${style} necklace
+* Matching earrings
+* Minimal bracelet
+* Elegant ring
+
+💰 Suggested Budget:
+* Necklace: ₹${Math.round(budgetNumber * 0.40).toLocaleString("en-IN")}
+* Earrings: ₹${Math.round(budgetNumber * 0.25).toLocaleString("en-IN")}
+* Bracelet: ₹${Math.round(budgetNumber * 0.20).toLocaleString("en-IN")}
+* Ring: ₹${Math.round(budgetNumber * 0.15).toLocaleString("en-IN")}
+
+✨ Plan:
+A ${style.toLowerCase()} jewelry collection suitable for ${occasion.toLowerCase()}, selected according to your requirements and budget.`;
+
+    }
+
+</script>
+
+</body>
+</html>
